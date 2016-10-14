@@ -312,6 +312,8 @@ under the License.
 					</excludes>
 					<systemPropertyVariables>
 						<log.level>WARN</log.level>
+						<scala.concurrent.context.minThreads>4</scala.concurrent.context.minThreads>
+						<scala.concurrent.context.maxThreads>4</scala.concurrent.context.maxThreads>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
