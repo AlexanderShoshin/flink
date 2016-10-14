@@ -70,6 +70,8 @@ import static org.mockito.Mockito.verify;
 public class ExecutionGraphRestartTest extends TestLogger {
 
 	private final static int NUM_TASKS = 31;
+	private final static int DEFAULT_RESTART_ATTEMPTS = 1;
+	private final static int DEFAULT_RESTART_DELAY = 1000;
 
 	@Test
 	public void testNoManualRestart() throws Exception {
@@ -186,7 +188,7 @@ public class ExecutionGraphRestartTest extends TestLogger {
 	@Test
 	public void testCancelWhileRestarting() throws Exception {
 		// We want to manually control the restart and delay
-		FixedDelayRestartStrategy restartStrategy = new FixedDelayRestartStrategy(Integer.MAX_VALUE, Long.MAX_VALUE);
+		FixedDelayRestartStrategy restartStrategy = new FixedDelayRestartStrategy(DEFAULT_RESTART_ATTEMPTS, DEFAULT_RESTART_DELAY);
 		Tuple2<ExecutionGraph, Instance> executionGraphInstanceTuple = createExecutionGraph(restartStrategy);
 		ExecutionGraph executionGraph = executionGraphInstanceTuple.f0;
 		Instance instance = executionGraphInstanceTuple.f1;
@@ -234,7 +236,7 @@ public class ExecutionGraphRestartTest extends TestLogger {
 			new SerializedValue<>(new ExecutionConfig()),
 			AkkaUtils.getDefaultTimeout(),
 			// We want to manually control the restart and delay
-			new FixedDelayRestartStrategy(Integer.MAX_VALUE, Long.MAX_VALUE));
+			new FixedDelayRestartStrategy(DEFAULT_RESTART_ATTEMPTS, DEFAULT_RESTART_DELAY));
 
 		JobVertex jobVertex = new JobVertex("NoOpInvokable");
 		jobVertex.setInvokableClass(Tasks.NoOpInvokable.class);
@@ -485,7 +487,7 @@ public class ExecutionGraphRestartTest extends TestLogger {
 		JobGraph jobGraph = new JobGraph("Test Job", vertex);
 		jobGraph.setExecutionConfig(executionConfig);
 
-		ExecutionGraph eg = newExecutionGraph(new FixedDelayRestartStrategy(1, 1000000));
+		ExecutionGraph eg = newExecutionGraph(new FixedDelayRestartStrategy(DEFAULT_RESTART_ATTEMPTS, DEFAULT_RESTART_DELAY));
 
 		eg.attachJobGraph(jobGraph.getVerticesSortedTopologicallyFromSources());
 
